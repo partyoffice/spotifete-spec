@@ -98,6 +98,15 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+        - listeningSession
+      operationId: closeListeningSession
+      responses:
+        "204":
+          description: Session closed successfully
+        "500":
+          $ref: "#/components/schemas/ErrorResponse"
     parameters:
       - name: joinId
         required: true
