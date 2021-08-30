@@ -42,6 +42,12 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/IsSessionAuthenticatedResponse"
+        "404":
+          description: Unknown authentication session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     parameters:
       - name: sessionId
         required: true
