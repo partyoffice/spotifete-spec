@@ -18,11 +18,11 @@ paths:
       operationId: newAuthenticationSession
       responses:
         "200":
-          description: Successful created session
+          description: Successful created authentication session
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/NewSessionResponse"
+                $ref: "#/components/schemas/NewAuthenticationSessionResponse"
         "500":
           $ref: "#/components/responses/ServerError"
 
@@ -111,7 +111,7 @@ components:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
   schemas:
-    NewSessionResponse:
+    NewAuthenticationSessionResponse:
       type: object
       properties:
         spotify_authentication_url:
