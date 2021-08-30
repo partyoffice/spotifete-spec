@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Spotifete Api
+  version: 0.0.1
+servers:
+  - url: localhost:3000
+    description: dev server
+tags:
+  - name: authentication
+    description: Authentication related routes
+paths:
+  /api/v2/auth/session/new:
+    get:
+      responses:
+        "200":
+          description: Successful created session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/NewSessionResponse"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /api/v2/auth/session/id/{sessionId}/is-authenticated:
+    get:
+      responses:
+        "200":
+          description: Successful created session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/NewSessionResponse"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - name: sessionId
+        required: true
+        in: path
+        schema:
+          type: string
+components:
+  responses:
+    ServerError:
+      description: An error occured
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+  schemas:
+    NewSessionResponse:
+      type: object
+      properties:
+        spotify_authentication_url:
+          type: string
+        spotifete_session_id:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        message: string
