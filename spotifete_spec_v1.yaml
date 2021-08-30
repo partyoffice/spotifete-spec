@@ -11,6 +11,8 @@ tags:
 paths:
   /api/v2/auth/session/new:
     get:
+      tags:
+        - authentication
       operationId: newAuthenticationSession
       responses:
         "200":
@@ -24,6 +26,8 @@ paths:
 
   /api/v2/auth/session/id/{sessionId}/is-authenticated:
     get:
+      tags:
+        - authentication
       operationId: isSessionAuthenticated
       responses:
         "200":
