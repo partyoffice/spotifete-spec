@@ -11,6 +11,7 @@ tags:
 paths:
   /api/v2/auth/session/new:
     get:
+      operationId: newAuthenticationSession
       responses:
         "200":
           description: Successful created session
@@ -23,6 +24,7 @@ paths:
 
   /api/v2/auth/session/id/{sessionId}/is-authenticated:
     get:
+      operationId: isSessionAuthenticated
       responses:
         "200":
           description: Session is authenticated
