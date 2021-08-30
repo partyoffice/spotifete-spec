@@ -25,11 +25,17 @@ paths:
     get:
       responses:
         "200":
-          description: Successful created session
+          description: Session is authenticated
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/NewSessionResponse"
+                $ref: "#/components/schemas/IsSessionAuthenticatedResponse"
+        "401":
+          description: Session is not authenticated
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/IsSessionAuthenticatedResponse"
         "500":
           $ref: "#/components/responses/ServerError"
     parameters:
@@ -59,4 +65,10 @@ components:
       properties:
         message:
           type: string
-
+    IsSessionAuthenticatedResponse:
+      type: object
+      properties:
+        authenticated:
+          type: boolean
+      required:
+        - authenticated
