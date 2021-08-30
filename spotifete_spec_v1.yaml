@@ -92,3 +92,21 @@ components:
           type: boolean
       required:
         - authenticated
+    SimpleListeningSession:
+      type: object
+      properties:
+        active:
+          type: boolean
+        owner_id:
+          type: integer
+          format: int64
+        join_id:
+          type: string
+        queue_playlist_id:
+          type: string
+        title:
+          type: string
+        fallback_playlist_id:
+          type: string
+        fallback_playlist_shuffle:
+          type: boolean
