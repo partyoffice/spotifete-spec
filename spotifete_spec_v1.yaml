@@ -108,12 +108,15 @@ paths:
         "500":
           $ref: "#/components/schemas/ErrorResponse"
     parameters:
-      - name: joinId
-        required: true
-        in: path
-        schema:
-          type: string
+      - $ref: "#/components/parameters/JoinId"
 components:
+  parameters:
+    JoinId:
+      name: joinId
+      required: true
+      in: path
+      schema:
+        type: string
   responses:
     ServerError:
       description: An error occured
