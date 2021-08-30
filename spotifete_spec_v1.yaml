@@ -69,9 +69,11 @@ paths:
       tags:
         - listeningSession
       operationId: createNewListeningSession
+      requestBody:
+        $ref: "#/components/schemas/NewListeningSessionRequest"
       responses:
         "200":
-          description: Created new listeningSession
+          description: Created new listening session
           content:
             "application/json":
               schema:
@@ -186,4 +188,16 @@ components:
         image_thumbnail_url:
           type: string
         owner_name:
+          type: string
+    NewListeningSessionRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AuthenticatedRequest"
+      properties:
+        listening_session_title:
+          type: string
+    AuthenticatedRequest:
+      type: object
+      properties:
+        login_session_id:
           type: string
