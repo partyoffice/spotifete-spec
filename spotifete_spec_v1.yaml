@@ -64,6 +64,20 @@ paths:
       responses:
         "204":
           description: Session was sucessfully invalidated
+  /api/v2/session/new:
+    post:
+      tags:
+        - listeningSession
+      operationId: createNewListeningSession
+      responses:
+        "200":
+          description: Created new listeningSession
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/SimpleListeningSession"
+        "500":
+          $ref: "#/components/schemas/ErrorResponse"
 components:
   responses:
     ServerError:
