@@ -42,8 +42,6 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/IsSessionAuthenticatedResponse"
-        "500":
-          $ref: "#/components/responses/ServerError"
     parameters:
       - name: sessionId
         required: true
