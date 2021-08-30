@@ -85,7 +85,7 @@ paths:
       operationId: getListeningSession
       responses:
         "200":
-          description: Created new listeningSession
+          description: Get information about a listening session
           content:
             "application/json":
               schema:
