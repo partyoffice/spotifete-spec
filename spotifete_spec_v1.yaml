@@ -133,6 +133,9 @@ components:
     SimpleListeningSession:
       type: object
       properties:
+        id:
+          type: integer
+          format: int64
         active:
           type: boolean
         owner_id:
@@ -149,5 +152,38 @@ components:
         fallback_playlist_shuffle:
           type: boolean
     FullListeningSession:
+      type: object
       allOf:
         - $ref: "#/components/schemas/SimpleListeningSession"
+      properties:
+        owner:
+          $ref: "#/components/schemas/SimpleUser"
+        fallback_playlist_metadata:
+          $ref: "#/components/schemas/PlaylistMetadata"
+
+    SimpleUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        spotify_id:
+          type: string
+        spotify_display_name:
+          type: string
+        name:
+          type: string
+    PlaylistMetadata:
+      type: object
+      properties:
+        spotify_playlist_id:
+          type: string
+        name:
+          type: string
+        track_count:
+          type: integer
+          format: int32
+        image_thumbnail_url:
+          type: string
+        owner_name:
+          type: string
