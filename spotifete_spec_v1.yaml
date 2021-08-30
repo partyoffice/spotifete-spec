@@ -8,6 +8,8 @@ servers:
 tags:
   - name: authentication
     description: Authentication related routes
+  - name: listeningSession
+    description:  ListeningSession related routes
 paths:
   /api/v2/auth/session/new:
     get:
