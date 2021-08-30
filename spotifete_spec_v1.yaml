@@ -78,6 +78,30 @@ paths:
                 $ref: "#/components/schemas/SimpleListeningSession"
         "500":
           $ref: "#/components/schemas/ErrorResponse"
+  /api/v2/session/id/{joinId}:
+    get:
+      tags:
+        - listeningSession
+      operationId: getListeningSession
+      responses:
+        "200":
+          description: Created new listeningSession
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ListeningSession"
+        "404":
+          description: Session not found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    parameters:
+      - name: joinId
+        required: true
+        in: path
+        schema:
+          type: string
 components:
   responses:
     ServerError:
