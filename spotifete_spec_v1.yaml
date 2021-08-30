@@ -124,3 +124,6 @@ components:
           type: string
         fallback_playlist_shuffle:
           type: boolean
+    ListeningSession:
+      allOf:
+        - $ref: "#/components/schemas/SimpleListeningSession"
