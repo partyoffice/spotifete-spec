@@ -89,7 +89,7 @@ paths:
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/ListeningSession"
+                $ref: "#/components/schemas/FullListeningSession"
         "404":
           description: Session not found
           content:
@@ -148,6 +148,6 @@ components:
           type: string
         fallback_playlist_shuffle:
           type: boolean
-    ListeningSession:
+    FullListeningSession:
       allOf:
         - $ref: "#/components/schemas/SimpleListeningSession"
