@@ -1,215 +1,219 @@
 openapi: 3.0.3
 info:
-  title: Spotifete Api
-  version: 0.0.1
+    title: Spotifete Api
+    version: 0.0.1
 servers:
-  - url: localhost:3000
-    description: dev server
+    - url: localhost:3000
+      description: dev server
 tags:
-  - name: authentication
-    description: Authentication related routes
-  - name: listeningSession
-    description:  ListeningSession related routes
+    - name: authentication
+      description: Authentication related routes
+    - name: listeningSession
+      description: ListeningSession related routes
 paths:
-  /api/v2/auth/session/new:
-    get:
-      tags:
-        - authentication
-      operationId: newAuthenticationSession
-      responses:
-        "200":
-          description: Successful created authentication session
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/NewAuthenticationSessionResponse"
-        "500":
-          $ref: "#/components/responses/ServerError"
+    /api/v2/auth/session/new:
+        get:
+            tags:
+                - authentication
+            operationId: newAuthenticationSession
+            responses:
+                '200':
+                    description: Successful created authentication session
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/NewAuthenticationSessionResponse'
+                '500':
+                    $ref: '#/components/responses/ServerError'
 
-  /api/v2/auth/session/id/{sessionId}/is-authenticated:
-    get:
-      tags:
-        - authentication
-      operationId: isSessionAuthenticated
-      responses:
-        "200":
-          description: Session is authenticated
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/IsSessionAuthenticatedResponse"
-        "401":
-          description: Session is not authenticated
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/IsSessionAuthenticatedResponse"
-        "404":
-          description: Unknown authentication session
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-    parameters:
-      - name: sessionId
-        required: true
-        in: path
-        schema:
-          type: string
-  /api/v2/auth/session/id/{sessionId}/invalidate:
-    patch:
-      tags:
-        - authentication
-      operationId: invalidateAuthenticationSession
-      responses:
-        "204":
-          description: Session was sucessfully invalidated
-  /api/v2/session/new:
-    post:
-      tags:
-        - listeningSession
-      operationId: createNewListeningSession
-      requestBody:
-        $ref: "#/components/schemas/NewListeningSessionRequest"
-      responses:
-        "200":
-          description: Created new listening session
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/SimpleListeningSession"
-        "500":
-          $ref: "#/components/schemas/ErrorResponse"
-  /api/v2/session/id/{joinId}:
-    get:
-      tags:
-        - listeningSession
-      operationId: getListeningSession
-      responses:
-        "200":
-          description: Get information about a listening session
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/FullListeningSession"
-        "404":
-          description: Session not found
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-    delete:
-      tags:
-        - listeningSession
-      operationId: closeListeningSession
-      responses:
-        "204":
-          description: Session closed successfully
-        "500":
-          $ref: "#/components/schemas/ErrorResponse"
-    parameters:
-      - $ref: "#/components/parameters/JoinId"
+    /api/v2/auth/session/id/{sessionId}/is-authenticated:
+        get:
+            tags:
+                - authentication
+            operationId: isSessionAuthenticated
+            responses:
+                '200':
+                    description: Session is authenticated
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/IsSessionAuthenticatedResponse'
+                '401':
+                    description: Session is not authenticated
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/IsSessionAuthenticatedResponse'
+                '404':
+                    description: Unknown authentication session
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+        parameters:
+            - $ref: '#/components/parameters/SessionId'
+    /api/v2/auth/session/id/{sessionId}/invalidate:
+        patch:
+            tags:
+                - authentication
+            operationId: invalidateAuthenticationSession
+            responses:
+                '204':
+                    description: Session was sucessfully
+        parameters:          
+            - $ref: '#/components/parameters/SessionId'
+    /api/v2/session/new:
+        post:
+            tags:
+                - listeningSession
+            operationId: createNewListeningSession
+            requestBody:
+                $ref: '#/components/schemas/NewListeningSessionRequest'
+            responses:
+                '200':
+                    description: Created new listening session
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/SimpleListeningSession'
+                '500':
+                    $ref: '#/components/schemas/ErrorResponse'
+    /api/v2/session/id/{joinId}:
+        get:
+            tags:
+                - listeningSession
+            operationId: getListeningSession
+            responses:
+                '200':
+                    description: Get information about a listening session
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/FullListeningSession'
+                '404':
+                    description: Session not found
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
+        delete:
+            tags:
+                - listeningSession
+            operationId: closeListeningSession
+            responses:
+                '204':
+                    description: Session closed successfully
+                '500':
+                    $ref: '#/components/schemas/ErrorResponse'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
 components:
-  parameters:
-    JoinId:
-      name: joinId
-      required: true
-      in: path
-      schema:
-        type: string
-  responses:
-    ServerError:
-      description: An error occured
-      content:
-        "application/json":
-          schema:
-            $ref: "#/components/schemas/ErrorResponse"
-  schemas:
-    NewAuthenticationSessionResponse:
-      type: object
-      properties:
-        spotify_authentication_url:
-          type: string
-        spotifete_session_id:
-          type: string
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-    IsSessionAuthenticatedResponse:
-      type: object
-      properties:
-        authenticated:
-          type: boolean
-      required:
-        - authenticated
-    SimpleListeningSession:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        active:
-          type: boolean
-        owner_id:
-          type: integer
-          format: int64
-        join_id:
-          type: string
-        queue_playlist_id:
-          type: string
-        title:
-          type: string
-        fallback_playlist_id:
-          type: string
-        fallback_playlist_shuffle:
-          type: boolean
-    FullListeningSession:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/SimpleListeningSession"
-      properties:
-        owner:
-          $ref: "#/components/schemas/SimpleUser"
-        fallback_playlist_metadata:
-          $ref: "#/components/schemas/PlaylistMetadata"
+    parameters:
+        JoinId:
+            name: joinId
+            required: true
+            in: path
+            schema:
+                type: string
+        SessionId:
+            name: sessionId
+            required: true
+            in: path
+            schema:
+              type: string
+    responses:
+        ServerError:
+            description: An error occured
+            content:
+                'application/json':
+                    schema:
+                        $ref: '#/components/schemas/ErrorResponse'
+    schemas:
+        NewAuthenticationSessionResponse:
+            type: object
+            properties:
+                spotify_authentication_url:
+                    type: string
+                spotifete_session_id:
+                    type: string
+        ErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+        IsSessionAuthenticatedResponse:
+            type: object
+            properties:
+                authenticated:
+                    type: boolean
+            required:
+                - authenticated
+        SimpleListeningSession:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                active:
+                    type: boolean
+                owner_id:
+                    type: integer
+                    format: int64
+                join_id:
+                    type: string
+                queue_playlist_id:
+                    type: string
+                title:
+                    type: string
+                fallback_playlist_id:
+                    type: string
+                fallback_playlist_shuffle:
+                    type: boolean
+        FullListeningSession:
+            type: object
+            allOf:
+                - $ref: '#/components/schemas/SimpleListeningSession'
+            properties:
+                owner:
+                    $ref: '#/components/schemas/SimpleUser'
+                fallback_playlist_metadata:
+                    $ref: '#/components/schemas/PlaylistMetadata'
 
-    SimpleUser:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        spotify_id:
-          type: string
-        spotify_display_name:
-          type: string
-        name:
-          type: string
-    PlaylistMetadata:
-      type: object
-      properties:
-        spotify_playlist_id:
-          type: string
-        name:
-          type: string
-        track_count:
-          type: integer
-          format: int32
-        image_thumbnail_url:
-          type: string
-        owner_name:
-          type: string
-    NewListeningSessionRequest:
-      type: object
-      allOf:
-        - $ref: "#/components/schemas/AuthenticatedRequest"
-      properties:
-        listening_session_title:
-          type: string
-    AuthenticatedRequest:
-      type: object
-      properties:
-        login_session_id:
-          type: string
+        SimpleUser:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                spotify_id:
+                    type: string
+                spotify_display_name:
+                    type: string
+                name:
+                    type: string
+        PlaylistMetadata:
+            type: object
+            properties:
+                spotify_playlist_id:
+                    type: string
+                name:
+                    type: string
+                track_count:
+                    type: integer
+                    format: int32
+                image_thumbnail_url:
+                    type: string
+                owner_name:
+                    type: string
+        NewListeningSessionRequest:
+            type: object
+            allOf:
+                - $ref: '#/components/schemas/AuthenticatedRequest'
+            properties:
+                listening_session_title:
+                    type: string
+        AuthenticatedRequest:
+            type: object
+            properties:
+                login_session_id:
+                    type: string
