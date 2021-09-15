@@ -23,9 +23,8 @@ paths:
                         'application/json':
                             schema:
                                 $ref: '#/components/schemas/NewAuthenticationSessionResponse'
-                '500':
+                '500':                    
                     $ref: '#/components/responses/ServerError'
-
     /api/v2/auth/session/id/{sessionId}/is-authenticated:
         get:
             tags:
@@ -59,7 +58,7 @@ paths:
             operationId: invalidateAuthenticationSession
             responses:
                 '204':
-                    description: Session was sucessfully
+                    description: Session was sucessfully invalidated
         parameters:          
             - $ref: '#/components/parameters/SessionId'
     /api/v2/session/new:
@@ -68,7 +67,10 @@ paths:
                 - listeningSession
             operationId: createNewListeningSession
             requestBody:
-                $ref: '#/components/schemas/NewListeningSessionRequest'
+                content:
+                  'application/json':
+                    schema:
+                      $ref: '#/components/schemas/NewListeningSessionRequest'
             responses:
                 '200':
                     description: Created new listening session
@@ -77,7 +79,11 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/SimpleListeningSession'
                 '500':
-                    $ref: '#/components/schemas/ErrorResponse'
+                    description: Failed to create new listening session
+                    content:
+                        'application/json':
+                            schema:
+                              $ref: '#/components/schemas/ErrorResponse'
     /api/v2/session/id/{joinId}:
         get:
             tags:
@@ -104,7 +110,11 @@ paths:
                 '204':
                     description: Session closed successfully
                 '500':
-                    $ref: '#/components/schemas/ErrorResponse'
+                  description: Error closing the session
+                  content:
+                      'application/json':
+                        schema:                      
+                            $ref: '#/components/schemas/ErrorResponse'
         parameters:
             - $ref: '#/components/parameters/JoinId'
 components:
@@ -178,7 +188,6 @@ components:
                     $ref: '#/components/schemas/SimpleUser'
                 fallback_playlist_metadata:
                     $ref: '#/components/schemas/PlaylistMetadata'
-
         SimpleUser:
             type: object
             properties:
