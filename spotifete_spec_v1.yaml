@@ -198,6 +198,28 @@ paths:
               schema:
                   type: boolean
               required: true
+    /api/v2/session/id/{joinId}/search/track:
+        get:
+            tags:
+                - listeningSession
+            operationId: searchTrack
+            responses:
+                '200':
+                    description: Search result for query
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/SearchTracksResponse'
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
+            - $ref: '#/components/parameters/Query'
+            - $ref: '#/components/parameters/Limit'
         parameters:
             - $ref: '#/components/parameters/JoinId'
 components:
@@ -214,6 +236,18 @@ components:
             in: path
             schema:
               type: string
+        Query:
+            name: query
+            required: true
+            in: query
+            schema:
+                type: string
+        Limit:
+            name: limit
+            in: query
+            schema:
+                type: integer
+                format: int32
     responses:
         ServerError:
             description: An error occured
@@ -373,3 +407,12 @@ components:
                 queue_last_updated:
                     type: string
                     format: date-time
+        SearchTracksResponse:
+            type: object
+            properties:
+                queue:
+                    type: string
+                tracks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/TrackMetaData'
