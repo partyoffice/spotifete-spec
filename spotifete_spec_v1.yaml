@@ -122,6 +122,22 @@ paths:
                             $ref: '#/components/schemas/ErrorResponse'
         parameters:
             - $ref: '#/components/parameters/JoinId'
+    /api/v2/session/id/{joinId}/queue:
+        get:
+            tags:
+                - listeningSession
+            operationId: getSessionQueue
+            responses:
+                '200':
+                    description: Get information about a listening session
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/GetSessionQueueResponse'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
 components:
     parameters:
         JoinId:
@@ -231,3 +247,54 @@ components:
             properties:
                 login_session_id:
                     type: string
+        GetSessionQueueResponse:
+            type: object
+            properties:
+                currently_playing:
+                    $ref: '#/components/schemas/SongRequest'
+                up_next:
+                    $ref: '#/components/schemas/SongRequest'
+                queue:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/SongRequest'
+        SongRequest:
+            type: object
+            properties:
+                session_id:
+                    type: integer
+                    format: int64
+                user_id:
+                    type: integer
+                    format: int64
+                spotify_track_id:
+                    type: string
+                track_metadata:
+                    $ref: '#/components/schemas/TrackMetaData'
+                status:
+                    $ref: '#/components/schemas/SongRequestStatus'
+        TrackMetaData:
+            type: object
+            properties:
+                spotify_track_id:
+                    type: string
+                track_name:
+                    type: string
+                artist_name:
+                    type: string
+                album_name:
+                    type: string
+                album_image_thumbnail_url:
+                    type: string
+        SongRequestStatus:
+            type: string
+            enum:
+                - PLAYED
+                - CURRENTLY_PLAYING
+                - UP_NEXT
+                - IN_QUEUE
+            x-enum-varnames:
+                - StatusPlayed
+                - StatusCurrentlyPlaying
+                - StatusUpNext
+                - StatusInQueue
