@@ -242,6 +242,27 @@ paths:
             - $ref: '#/components/parameters/JoinId'
             - $ref: '#/components/parameters/Query'
             - $ref: '#/components/parameters/Limit'
+    /api/v2/session/id/{joinId}/request-track:
+        post:
+            tags:
+                - listeningSession
+            operationId: requestTrack
+            requestBody:
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/RequestTrackRequest'
+            responses:
+                '204':
+                    description: Successful requested track
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
         parameters:
             - $ref: '#/components/parameters/JoinId'
 components:
@@ -447,3 +468,8 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/PlaylistMetadata'
+        RequestTrackRequest:
+            type: object
+            properties:
+                track_id:
+                    type: string
