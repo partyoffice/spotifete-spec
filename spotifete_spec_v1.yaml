@@ -25,7 +25,7 @@ paths:
                         'application/json':
                             schema:
                                 $ref: '#/components/schemas/NewAuthenticationSessionResponse'
-                '500':                    
+                '500':
                     $ref: '#/components/responses/ServerError'
     /api/v2/auth/session/id/{sessionId}/is-authenticated:
         get:
@@ -61,7 +61,7 @@ paths:
             responses:
                 '204':
                     description: Session was sucessfully invalidated
-        parameters:          
+        parameters:
             - $ref: '#/components/parameters/SessionId'
     /api/v2/session/new:
         post:
@@ -70,9 +70,9 @@ paths:
             operationId: createNewListeningSession
             requestBody:
                 content:
-                  'application/json':
-                    schema:
-                      $ref: '#/components/schemas/NewListeningSessionRequest'
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/NewListeningSessionRequest'
             responses:
                 '200':
                     description: Created new listening session
@@ -85,7 +85,7 @@ paths:
                     content:
                         'application/json':
                             schema:
-                              $ref: '#/components/schemas/ErrorResponse'
+                                $ref: '#/components/schemas/ErrorResponse'
     /api/v2/session/id/{joinId}:
         get:
             tags:
@@ -117,11 +117,11 @@ paths:
                 '204':
                     description: Session closed successfully
                 '500':
-                  description: Error closing the session
-                  content:
-                      'application/json':
-                        schema:                      
-                            $ref: '#/components/schemas/ErrorResponse'
+                    description: Error closing the session
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/ErrorResponse'
         parameters:
             - $ref: '#/components/parameters/JoinId'
     /api/v2/session/id/{joinId}/queue:
@@ -416,7 +416,7 @@ components:
             required: true
             in: path
             schema:
-              type: string
+                type: string
         Query:
             name: query
             required: true
