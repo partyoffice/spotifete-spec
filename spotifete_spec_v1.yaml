@@ -352,6 +352,29 @@ paths:
                     $ref: '#/components/responses/ServerError'
         parameters:
             - $ref: '#/components/parameters/JoinId'
+    /api/v2/session/id/{joinId}/refollow-queue-playlist/shuffle:
+        patch:
+            tags:
+                - listeningSession
+            operationId: setFallbackPlaylistShuffle
+            requestBody:
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/SetFallbackPlaylistShuffleRequest'
+            responses:
+                '204':
+                    description: Successful enabled playlist shuffle
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '401':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
 components:
     parameters:
         JoinId:
@@ -567,3 +590,10 @@ components:
             properties:
                 new_fallback_playlist_id:
                     type: string
+        SetFallbackPlaylistShuffleRequest:
+            type: object
+            allOf:
+                - $ref: '#/components/schemas/AuthenticatedRequest'
+            properties:
+                shuffle:
+                    type: boolean
