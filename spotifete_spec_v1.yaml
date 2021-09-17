@@ -158,6 +158,24 @@ paths:
                     $ref: '#/components/responses/ServerError'
         parameters:
             - $ref: '#/components/parameters/JoinId'
+    /api/v2/session/id/{joinId}/queue/last-updated:
+        get:
+            tags:
+                - listeningSession
+            operationId: queueLastUpdated
+            responses:
+                '200':
+                    description: time of last queue update
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/GetSessionQueueResponse'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
         parameters:
             - $ref: '#/components/parameters/JoinId'
 components:
@@ -327,3 +345,9 @@ components:
             properties:
                 spotify_track_id:
                     type: string
+        QueueLastUpdatedResponse:
+            type: object
+            properties:
+                queue_last_updated:
+                    type: string
+                    format: date-time
