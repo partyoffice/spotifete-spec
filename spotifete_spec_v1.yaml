@@ -309,6 +309,29 @@ paths:
                     $ref: '#/components/responses/ServerError'
         parameters:
             - $ref: '#/components/parameters/JoinId'
+    /api/v2/session/id/{joinId}/fallback-playlist:
+        put:
+            tags:
+                - listeningSession
+            operationId: changeFallbackPlaylist
+            requestBody:
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/ChangeFallbackPlaylistRequest'
+            responses:
+                '204':
+                    description: Successful changed fallback playlist
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '401':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
 components:
     parameters:
         JoinId:
@@ -516,4 +539,11 @@ components:
             type: object
             properties:
                 track_id:
+                    type: string
+        ChangeFallbackPlaylistRequest:
+            type: object
+            allOf:
+                - $ref: '#/components/schemas/AuthenticatedRequest'
+            properties:
+                new_fallback_playlist_id:
                     type: string
