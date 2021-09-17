@@ -220,6 +220,28 @@ paths:
             - $ref: '#/components/parameters/JoinId'
             - $ref: '#/components/parameters/Query'
             - $ref: '#/components/parameters/Limit'
+    /api/v2/session/id/{joinId}/search/playlist:
+        get:
+            tags:
+                - listeningSession
+            operationId: searchPlaylist
+            responses:
+                '200':
+                    description: Search result for query
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/SearchPlaylistResponse'
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
+            - $ref: '#/components/parameters/Query'
+            - $ref: '#/components/parameters/Limit'
         parameters:
             - $ref: '#/components/parameters/JoinId'
 components:
@@ -416,3 +438,12 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/TrackMetaData'
+        SearchPlaylistResponse:
+            type: object
+            properties:
+                queue:
+                    type: string
+                playlists:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PlaylistMetadata'
