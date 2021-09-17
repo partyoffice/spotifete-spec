@@ -330,6 +330,26 @@ paths:
                     $ref: '#/components/responses/ServerError'
                 '500':
                     $ref: '#/components/responses/ServerError'
+        delete:
+            tags:
+                - listeningSession
+            operationId: removeFallbackPlaylist
+            requestBody:
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/AuthenticatedRequest'
+            responses:
+                '204':
+                    description: Successful changed fallback playlist
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '401':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
         parameters:
             - $ref: '#/components/parameters/JoinId'
 components:
