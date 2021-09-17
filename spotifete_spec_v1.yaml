@@ -377,6 +377,32 @@ paths:
                     $ref: '#/components/responses/ServerError'
         parameters:
             - $ref: '#/components/parameters/JoinId'
+    /api/v2/user/me:
+        get:
+            tags:
+                - user
+            operationId: getCurrentUser
+            responses:
+                '200':
+                    description: Current user
+                    content:
+                        'application/json':
+                            schema:
+                                $ref: '#/components/schemas/FullUser'
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '401':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - name: loginSessionId
+              required: true
+              in: query
+              schema:
+                  type: string
 components:
     parameters:
         JoinId:
@@ -599,3 +625,12 @@ components:
             properties:
                 shuffle:
                     type: boolean
+        FullUser:
+            type: object
+            allOf:
+                - $ref: '#/components/schemas/SimpleUser'
+            properties:
+                listening_sessions:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/SimpleListeningSession'
