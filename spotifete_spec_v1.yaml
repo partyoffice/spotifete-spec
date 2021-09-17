@@ -286,6 +286,29 @@ paths:
                     $ref: '#/components/responses/ServerError'
         parameters:
             - $ref: '#/components/parameters/JoinId'
+    /api/v2/session/id/{joinId}/refollow-queue-playlist:
+        post:
+            tags:
+                - listeningSession
+            operationId: refollowQueuePlaylist
+            requestBody:
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/AuthenticatedRequest'
+            responses:
+                '204':
+                    description: Successful refollowed queue playlist
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '401':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
 components:
     parameters:
         JoinId:
