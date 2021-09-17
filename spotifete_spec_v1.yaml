@@ -176,6 +176,28 @@ paths:
                     $ref: '#/components/responses/ServerError'
         parameters:
             - $ref: '#/components/parameters/JoinId'
+    /api/v2/session/id/{joinId}/qrcode:
+        get:
+            tags:
+                - listeningSession
+            operationId: qrCode
+            responses:
+                '200':
+                    description: Session qr-code
+                    content:
+                        'image/png':
+                            schema:
+                                type: string
+                                format: binary
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
+            - name: disableBorder
+              in: query
+              schema:
+                  type: boolean
+              required: true
         parameters:
             - $ref: '#/components/parameters/JoinId'
 components:
