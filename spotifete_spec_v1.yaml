@@ -10,6 +10,8 @@ tags:
       description: Authentication related routes
     - name: listeningSession
       description: ListeningSession related routes
+    - name: user
+      description: user related routes
 paths:
     /api/v2/auth/session/new:
         get:
