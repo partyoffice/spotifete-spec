@@ -136,6 +136,28 @@ paths:
                                 $ref: '#/components/schemas/GetSessionQueueResponse'
                 '404':
                     $ref: '#/components/responses/ServerError'
+        delete:
+            tags:
+                - listeningSession
+            operationId: deleteRequestFromQueue
+            requestBody:
+                content:
+                    'application/json':
+                        schema:
+                            $ref: '#/components/schemas/DeleteRequestFromQueueRequest'
+            responses:
+                '204':
+                    description: Session closed successfully
+                '400':
+                    $ref: '#/components/responses/ServerError'
+                '401':
+                    $ref: '#/components/responses/ServerError'
+                '404':
+                    $ref: '#/components/responses/ServerError'
+                '500':
+                    $ref: '#/components/responses/ServerError'
+        parameters:
+            - $ref: '#/components/parameters/JoinId'
         parameters:
             - $ref: '#/components/parameters/JoinId'
 components:
@@ -298,3 +320,10 @@ components:
                 - StatusCurrentlyPlaying
                 - StatusUpNext
                 - StatusInQueue
+        DeleteRequestFromQueueRequest:
+            type: object
+            allOf:
+                - $ref: '#/components/schemas/AuthenticatedRequest'
+            properties:
+                spotify_track_id:
+                    type: string
