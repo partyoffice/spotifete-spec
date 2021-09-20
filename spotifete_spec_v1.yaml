@@ -447,8 +447,10 @@ components:
             properties:
                 spotify_authentication_url:
                     type: string
+                    nullable: false
                 spotifete_session_id:
                     type: string
+                    nullable: false
         ErrorResponse:
             type: object
             properties:
