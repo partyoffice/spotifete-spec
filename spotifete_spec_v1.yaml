@@ -18,6 +18,11 @@ paths:
             tags:
                 - authentication
             operationId: newAuthenticationSession
+            parameters:
+                - name: redirectTo
+                  in: query
+                  schema:
+                      type: string                
             responses:
                 '200':
                     description: Successful created authentication session
