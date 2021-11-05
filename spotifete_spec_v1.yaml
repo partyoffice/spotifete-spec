@@ -555,8 +555,6 @@ components:
                     type: string
                 track_metadata:
                     $ref: '#/components/schemas/TrackMetaData'
-                status:
-                    $ref: '#/components/schemas/SongRequestStatus'
         TrackMetaData:
             type: object
             properties:
@@ -570,18 +568,6 @@ components:
                     type: string
                 album_image_thumbnail_url:
                     type: string
-        SongRequestStatus:
-            type: string
-            enum:
-                - PLAYED
-                - CURRENTLY_PLAYING
-                - UP_NEXT
-                - IN_QUEUE
-            x-enum-varnames:
-                - StatusPlayed
-                - StatusCurrentlyPlaying
-                - StatusUpNext
-                - StatusInQueue
         DeleteRequestFromQueueRequest:
             type: object
             allOf:
