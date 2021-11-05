@@ -534,10 +534,6 @@ components:
         GetSessionQueueResponse:
             type: object
             properties:
-                currently_playing:
-                    $ref: '#/components/schemas/SongRequest'
-                up_next:
-                    $ref: '#/components/schemas/SongRequest'
                 queue:
                     type: array
                     items:
