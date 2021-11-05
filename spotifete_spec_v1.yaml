@@ -598,6 +598,8 @@ components:
         RequestTrackRequest:
             type: object
             properties:
+                username:
+                    type: string
                 track_id:
                     type: string
         ChangeFallbackPlaylistRequest:
