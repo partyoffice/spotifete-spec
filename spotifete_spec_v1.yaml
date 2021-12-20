@@ -488,6 +488,8 @@ components:
             type: object
             allOf:
                 - $ref: '#/components/schemas/SimpleListeningSession'
+                  discriminator:
+                    propertyName: AuthenticatedRequest
             properties:
                 owner:
                     $ref: '#/components/schemas/SimpleUser'
@@ -523,6 +525,8 @@ components:
             type: object
             allOf:
                 - $ref: '#/components/schemas/AuthenticatedRequest'
+                  discriminator:
+                    propertyName: AuthenticatedRequest
             properties:
                 listening_session_title:
                     type: string
