@@ -1,631 +1,649 @@
 openapi: 3.0.3
 info:
-    title: Spotifete Api
-    version: 0.0.1
+  title: Spotifete Api
+  version: 0.0.1
+  description: Specfile for Spotifete
+  contact:
+    name: SimonErm
 servers:
-    - url: localhost:3000
-      description: dev server
+  - url: localhost:3000
+    description: dev server
 tags:
-    - name: authentication
-      description: Authentication related routes
-    - name: listeningSession
-      description: ListeningSession related routes
-    - name: user
-      description: user related routes
+  - name: authentication
+    description: Authentication related routes
+  - name: listeningSession
+    description: ListeningSession related routes
+  - name: user
+    description: user related routes
 paths:
-    /api/v2/auth/session/new:
-        get:
-            tags:
-                - authentication
-            operationId: newAuthenticationSession
-            parameters:
-                - name: redirectTo
-                  in: query
-                  schema:
-                      type: string                
-            responses:
-                '200':
-                    description: Successful created authentication session
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/NewAuthenticationSessionResponse'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-    /api/v2/auth/session/id/{sessionId}/is-authenticated:
-        get:
-            tags:
-                - authentication
-            operationId: isSessionAuthenticated
-            responses:
-                '200':
-                    description: Session is authenticated
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/IsSessionAuthenticatedResponse'
-                '401':
-                    description: Session is not authenticated
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/IsSessionAuthenticatedResponse'
-                '404':
-                    description: Unknown authentication session
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-        parameters:
-            - $ref: '#/components/parameters/SessionId'
-    /api/v2/auth/session/id/{sessionId}/invalidate:
-        patch:
-            tags:
-                - authentication
-            operationId: invalidateAuthenticationSession
-            responses:
-                '204':
-                    description: Session was sucessfully invalidated
-        parameters:
-            - $ref: '#/components/parameters/SessionId'
-    /api/v2/session/new:
-        post:
-            tags:
-                - listeningSession
-            operationId: createNewListeningSession
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/NewListeningSessionRequest'
-            responses:
-                '200':
-                    description: Created new listening session
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/SimpleListeningSession'
-                '500':
-                    description: Failed to create new listening session
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-    /api/v2/session/id/{joinId}:
-        get:
-            tags:
-                - listeningSession
-            operationId: getListeningSession
-            responses:
-                '200':
-                    description: Get information about a listening session
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/FullListeningSession'
-                '404':
-                    description: Session not found
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-        delete:
-            tags:
-                - listeningSession
-            operationId: closeListeningSession
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/AuthenticatedRequest'
-            responses:
-                '204':
-                    description: Session closed successfully
-                '500':
-                    description: Error closing the session
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/ErrorResponse'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-    /api/v2/session/id/{joinId}/queue:
-        get:
-            tags:
-                - listeningSession
-            operationId: getSessionQueue
-            responses:
-                '200':
-                    description: Get information about a listening session
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/GetSessionQueueResponse'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-        delete:
-            tags:
-                - listeningSession
-            operationId: deleteRequestFromQueue
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/DeleteRequestFromQueueRequest'
-            responses:
-                '204':
-                    description: Session closed successfully
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '401':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-    /api/v2/session/id/{joinId}/queue/last-updated:
-        get:
-            tags:
-                - listeningSession
-            operationId: queueLastUpdated
-            responses:
-                '200':
-                    description: time of last queue update
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/GetSessionQueueResponse'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-    /api/v2/session/id/{joinId}/qrcode:
-        get:
-            tags:
-                - listeningSession
-            operationId: qrCode
-            responses:
-                '200':
-                    description: Session qr-code
-                    content:
-                        'image/png':
-                            schema:
-                                type: string
-                                format: binary
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-            - name: disableBorder
-              in: query
+  /api/v2/auth/session/new:
+    get:
+      description: Create a new session
+      tags:
+        - authentication
+      operationId: newAuthenticationSession
+      parameters:
+        - name: redirectTo
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful created authentication session
+          content:
+            "application/json":
               schema:
-                  type: boolean
-              required: true
-    /api/v2/session/id/{joinId}/search/track:
-        get:
-            tags:
-                - listeningSession
-            operationId: searchTrack
-            responses:
-                '200':
-                    description: Search result for query
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/SearchTracksResponse'
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-            - $ref: '#/components/parameters/Query'
-            - $ref: '#/components/parameters/Limit'
-    /api/v2/session/id/{joinId}/search/playlist:
-        get:
-            tags:
-                - listeningSession
-            operationId: searchPlaylist
-            responses:
-                '200':
-                    description: Search result for query
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/SearchPlaylistResponse'
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-            - $ref: '#/components/parameters/Query'
-            - $ref: '#/components/parameters/Limit'
-    /api/v2/session/id/{joinId}/request-track:
-        post:
-            tags:
-                - listeningSession
-            operationId: requestTrack
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/RequestTrackRequest'
-            responses:
-                '204':
-                    description: Successful requested track
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-    /api/v2/session/id/{joinId}/new-queue-playlist:
-        post:
-            tags:
-                - listeningSession
-            operationId: newQueuePlaylist
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/AuthenticatedRequest'
-            responses:
-                '204':
-                    description: Successful created queue playlist
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '401':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-    /api/v2/session/id/{joinId}/refollow-queue-playlist:
-        post:
-            tags:
-                - listeningSession
-            operationId: refollowQueuePlaylist
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/AuthenticatedRequest'
-            responses:
-                '204':
-                    description: Successful refollowed queue playlist
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '401':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-    /api/v2/session/id/{joinId}/fallback-playlist:
-        put:
-            tags:
-                - listeningSession
-            operationId: changeFallbackPlaylist
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/ChangeFallbackPlaylistRequest'
-            responses:
-                '204':
-                    description: Successful changed fallback playlist
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '401':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        delete:
-            tags:
-                - listeningSession
-            operationId: removeFallbackPlaylist
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/AuthenticatedRequest'
-            responses:
-                '204':
-                    description: Successful changed fallback playlist
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '401':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-    /api/v2/session/id/{joinId}/refollow-queue-playlist/shuffle:
-        patch:
-            tags:
-                - listeningSession
-            operationId: setFallbackPlaylistShuffle
-            requestBody:
-                content:
-                    'application/json':
-                        schema:
-                            $ref: '#/components/schemas/SetFallbackPlaylistShuffleRequest'
-            responses:
-                '204':
-                    description: Successful enabled playlist shuffle
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '401':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - $ref: '#/components/parameters/JoinId'
-    /api/v2/user/me:
-        get:
-            tags:
-                - user
-            operationId: getCurrentUser
-            responses:
-                '200':
-                    description: Current user
-                    content:
-                        'application/json':
-                            schema:
-                                $ref: '#/components/schemas/FullUser'
-                '400':
-                    $ref: '#/components/responses/ServerError'
-                '401':
-                    $ref: '#/components/responses/ServerError'
-                '404':
-                    $ref: '#/components/responses/ServerError'
-                '500':
-                    $ref: '#/components/responses/ServerError'
-        parameters:
-            - name: loginSessionId
-              required: true
-              in: query
+                $ref: "#/components/schemas/NewAuthenticationSessionResponse"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /api/v2/auth/session/id/{sessionId}/is-authenticated:
+    get:
+      description: Check if current session valid
+      tags:
+        - authentication
+      operationId: isSessionAuthenticated
+      responses:
+        "200":
+          description: Session is authenticated
+          content:
+            "application/json":
               schema:
-                  type: string
-components:
+                $ref: "#/components/schemas/IsSessionAuthenticatedResponse"
+        "401":
+          description: Session is not authenticated
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/IsSessionAuthenticatedResponse"
+        "404":
+          description: Unknown authentication session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
     parameters:
-        JoinId:
-            name: joinId
-            required: true
-            in: path
+      - $ref: "#/components/parameters/SessionId"
+  /api/v2/auth/session/id/{sessionId}/invalidate:
+    patch:
+      description: Invalidate session
+      tags:
+        - authentication
+      operationId: invalidateAuthenticationSession
+      responses:
+        "204":
+          description: Session was sucessfully invalidated
+    parameters:
+      - $ref: "#/components/parameters/SessionId"
+  /api/v2/session/new:
+    post:
+      description: Create a new listening session
+      tags:
+        - listeningSession
+      operationId: createNewListeningSession
+      requestBody:
+        content:
+          "application/json":
             schema:
+              $ref: "#/components/schemas/NewListeningSessionRequest"
+      responses:
+        "200":
+          description: Created new listening session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/SimpleListeningSession"
+        "500":
+          description: Failed to create new listening session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v2/session/id/{joinId}:
+    get:
+      description: Join a listening session
+      tags:
+        - listeningSession
+      operationId: getListeningSession
+      responses:
+        "200":
+          description: Get information about a listening session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/FullListeningSession"
+        "404":
+          description: Session not found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      description: Delete a listening session
+      tags:
+        - listeningSession
+      operationId: closeListeningSession
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/AuthenticatedRequest"
+      responses:
+        "204":
+          description: Session closed successfully
+        "500":
+          description: Error closing the session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+  /api/v2/session/id/{joinId}/queue:
+    get:
+      description: Get the queue of a session
+      tags:
+        - listeningSession
+      operationId: getSessionQueue
+      responses:
+        "200":
+          description: Get information about a listening session
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/GetSessionQueueResponse"
+        "404":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      description: Clear a queue for session
+      tags:
+        - listeningSession
+      operationId: deleteRequestFromQueue
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DeleteRequestFromQueueRequest"
+      responses:
+        "204":
+          description: Session closed successfully
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "401":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+  /api/v2/session/id/{joinId}/queue/last-updated:
+    get:
+      description: Get the last time
+      tags:
+        - listeningSession
+      operationId: queueLastUpdated
+      responses:
+        "200":
+          description: time of last queue update
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/QueueLastUpdatedResponse"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+  /api/v2/session/id/{joinId}/qrcode:
+    get:
+      description: Get session qrcode
+      tags:
+        - listeningSession
+      operationId: qrCode
+      responses:
+        "200":
+          description: Session qr-code
+          content:
+            "image/png":
+              schema:
                 type: string
-        SessionId:
-            name: sessionId
-            required: true
-            in: path
+                format: binary
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+      - name: disableBorder
+        in: query
+        schema:
+          type: boolean
+        required: true
+  /api/v2/session/id/{joinId}/search/track:
+    get:
+      description: Search track
+      tags:
+        - listeningSession
+      operationId: searchTrack
+      responses:
+        "200":
+          description: Search result for query
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/SearchTracksResponse"
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+      - $ref: "#/components/parameters/Query"
+      - $ref: "#/components/parameters/Limit"
+  /api/v2/session/id/{joinId}/search/playlist:
+    get:
+      description: Search playlist for listening session
+      tags:
+        - listeningSession
+      operationId: searchPlaylist
+      responses:
+        "200":
+          description: Search result for query
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/SearchPlaylistResponse"
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+      - $ref: "#/components/parameters/Query"
+      - $ref: "#/components/parameters/Limit"
+  /api/v2/session/id/{joinId}/request-track:
+    post:
+      description: Request a track for session
+      tags:
+        - listeningSession
+      operationId: requestTrack
+      requestBody:
+        content:
+          "application/json":
             schema:
-                type: string
-        Query:
-            name: query
-            required: true
-            in: query
+              $ref: "#/components/schemas/RequestTrackRequest"
+      responses:
+        "204":
+          description: Successful requested track
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+  /api/v2/session/id/{joinId}/new-queue-playlist:
+    post:
+      description: Create a new queue playlist
+      tags:
+        - listeningSession
+      operationId: newQueuePlaylist
+      requestBody:
+        content:
+          "application/json":
             schema:
-                type: string
-        Limit:
-            name: limit
-            in: query
+              $ref: "#/components/schemas/AuthenticatedRequest"
+      responses:
+        "204":
+          description: Successful created queue playlist
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "401":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+  /api/v2/session/id/{joinId}/refollow-queue-playlist:
+    post:
+      description: Refollow playlist (workaround for weird spotify behaviour)
+      tags:
+        - listeningSession
+      operationId: refollowQueuePlaylist
+      requestBody:
+        content:
+          "application/json":
             schema:
-                type: integer
-                format: int32
-    responses:
-        ServerError:
-            description: An error occured
-            content:
-                'application/json':
-                    schema:
-                        $ref: '#/components/schemas/ErrorResponse'
-    schemas:
-        NewAuthenticationSessionResponse:
-            type: object
-            properties:
-                spotify_authentication_url:
-                    type: string
-                    nullable: false
-                spotifete_session_id:
-                    type: string
-                    nullable: false
-        ErrorResponse:
-            type: object
-            properties:
-                message:
-                    type: string
-        IsSessionAuthenticatedResponse:
-            type: object
-            properties:
-                authenticated:
-                    type: boolean
-            required:
-                - authenticated
-        SimpleListeningSession:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int64
-                active:
-                    type: boolean
-                owner_id:
-                    type: integer
-                    format: int64
-                join_id:
-                    type: string
-                queue_playlist_id:
-                    type: string
-                title:
-                    type: string
-                fallback_playlist_id:
-                    type: string
-                fallback_playlist_shuffle:
-                    type: boolean
-        FullListeningSession:
-            type: object
-            allOf:
-                - $ref: '#/components/schemas/SimpleListeningSession'
-                  discriminator:
-                    propertyName: AuthenticatedRequest
-            properties:
-                owner:
-                    $ref: '#/components/schemas/SimpleUser'
-                fallback_playlist_metadata:
-                    $ref: '#/components/schemas/PlaylistMetadata'
-        SimpleUser:
-            type: object
-            properties:
-                id:
-                    type: integer
-                    format: int32
-                spotify_id:
-                    type: string
-                spotify_display_name:
-                    type: string
-                name:
-                    type: string
-        PlaylistMetadata:
-            type: object
-            properties:
-                spotify_playlist_id:
-                    type: string
-                name:
-                    type: string
-                track_count:
-                    type: integer
-                    format: int32
-                image_thumbnail_url:
-                    type: string
-                owner_name:
-                    type: string
-        NewListeningSessionRequest:
-            type: object
-            allOf:
-                - $ref: '#/components/schemas/AuthenticatedRequest'
-                  discriminator:
-                    propertyName: AuthenticatedRequest
-            properties:
-                listening_session_title:
-                    type: string
-        AuthenticatedRequest:
-            type: object
-            properties:
-                login_session_id:
-                    type: string
-        GetSessionQueueResponse:
-            type: object
-            properties:
-                queue:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/SongRequest'
-        SongRequest:
-            type: object
-            properties:
-                session_id:
-                    type: integer
-                    format: int64
-                user_id:
-                    type: integer
-                    format: int64
-                spotify_track_id:
-                    type: string
-                track_metadata:
-                    $ref: '#/components/schemas/TrackMetaData'
-        TrackMetaData:
-            type: object
-            properties:
-                spotify_track_id:
-                    type: string
-                track_name:
-                    type: string
-                artist_name:
-                    type: string
-                album_name:
-                    type: string
-                album_image_thumbnail_url:
-                    type: string
-        DeleteRequestFromQueueRequest:
-            type: object
-            allOf:
-                - $ref: '#/components/schemas/AuthenticatedRequest'
-            properties:
-                spotify_track_id:
-                    type: string
-        QueueLastUpdatedResponse:
-            type: object
-            properties:
-                queue_last_updated:
-                    type: string
-                    format: date-time
-        SearchTracksResponse:
-            type: object
-            properties:
-                queue:
-                    type: string
-                tracks:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/TrackMetaData'
-        SearchPlaylistResponse:
-            type: object
-            properties:
-                queue:
-                    type: string
-                playlists:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/PlaylistMetadata'
-        RequestTrackRequest:
-            type: object
-            properties:
-                username:
-                    type: string
-                track_id:
-                    type: string
-        ChangeFallbackPlaylistRequest:
-            type: object
-            allOf:
-                - $ref: '#/components/schemas/AuthenticatedRequest'
-            properties:
-                new_fallback_playlist_id:
-                    type: string
-        SetFallbackPlaylistShuffleRequest:
-            type: object
-            allOf:
-                - $ref: '#/components/schemas/AuthenticatedRequest'
-            properties:
-                shuffle:
-                    type: boolean
-        FullUser:
-            type: object
-            allOf:
-                - $ref: '#/components/schemas/SimpleUser'
-            properties:
-                listening_sessions:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/SimpleListeningSession'
+              $ref: "#/components/schemas/AuthenticatedRequest"
+      responses:
+        "204":
+          description: Successful refollowed queue playlist
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "401":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+  /api/v2/session/id/{joinId}/fallback-playlist:
+    put:
+      description: Add a fallback playlist
+      tags:
+        - listeningSession
+      operationId: changeFallbackPlaylist
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/ChangeFallbackPlaylistRequest"
+      responses:
+        "204":
+          description: Successful changed fallback playlist
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "401":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    delete:
+      description: Remove fallback playlist
+      tags:
+        - listeningSession
+      operationId: removeFallbackPlaylist
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/AuthenticatedRequest"
+      responses:
+        "204":
+          description: Successful changed fallback playlist
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "401":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+  /api/v2/session/id/{joinId}/refollow-queue-playlist/shuffle:
+    patch:
+      description: Toggle shuffle feature
+      tags:
+        - listeningSession
+      operationId: setFallbackPlaylistShuffle
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/SetFallbackPlaylistShuffleRequest"
+      responses:
+        "204":
+          description: Successful enabled playlist shuffle
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "401":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - $ref: "#/components/parameters/JoinId"
+  /api/v2/user/me:
+    get:
+      description: Get information of current user
+      tags:
+        - user
+      operationId: getCurrentUser
+      responses:
+        "200":
+          description: Current user
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/FullUser"
+        "400":
+          $ref: "#/components/responses/ServerError"
+        "401":
+          $ref: "#/components/responses/ServerError"
+        "404":
+          $ref: "#/components/responses/ServerError"
+        "500":
+          $ref: "#/components/responses/ServerError"
+    parameters:
+      - name: loginSessionId
+        required: true
+        in: query
+        schema:
+          type: string
+components:
+  parameters:
+    JoinId:
+      name: joinId
+      required: true
+      in: path
+      schema:
+        type: string
+    SessionId:
+      name: sessionId
+      required: true
+      in: path
+      schema:
+        type: string
+    Query:
+      name: query
+      required: true
+      in: query
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        format: int32
+  responses:
+    ServerError:
+      description: An error occured
+      content:
+        "application/json":
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+  schemas:
+    NewAuthenticationSessionResponse:
+      type: object
+      properties:
+        spotify_authentication_url:
+          type: string
+          nullable: false
+        spotifete_session_id:
+          type: string
+          nullable: false
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    IsSessionAuthenticatedResponse:
+      type: object
+      properties:
+        authenticated:
+          type: boolean
+      required:
+        - authenticated
+    SimpleListeningSession:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        active:
+          type: boolean
+        owner_id:
+          type: integer
+          format: int64
+        join_id:
+          type: string
+        queue_playlist_id:
+          type: string
+        title:
+          type: string
+        fallback_playlist_id:
+          type: string
+        fallback_playlist_shuffle:
+          type: boolean
+    FullListeningSession:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SimpleListeningSession"
+      properties:
+        owner:
+          $ref: "#/components/schemas/SimpleUser"
+        fallback_playlist_metadata:
+          $ref: "#/components/schemas/PlaylistMetadata"
+    SimpleUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        spotify_id:
+          type: string
+        spotify_display_name:
+          type: string
+        name:
+          type: string
+    PlaylistMetadata:
+      type: object
+      properties:
+        spotify_playlist_id:
+          type: string
+        name:
+          type: string
+        track_count:
+          type: integer
+          format: int32
+        image_thumbnail_url:
+          type: string
+        owner_name:
+          type: string
+    NewListeningSessionRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AuthenticatedRequest"
+      properties:
+        listening_session_title:
+          type: string
+    AuthenticatedRequest:
+      type: object
+      properties:
+        login_session_id:
+          type: string
+    GetSessionQueueResponse:
+      type: object
+      properties:
+        queue:
+          type: array
+          items:
+            $ref: "#/components/schemas/SongRequest"
+    SongRequest:
+      type: object
+      properties:
+        session_id:
+          type: integer
+          format: int64
+        user_id:
+          type: integer
+          format: int64
+        spotify_track_id:
+          type: string
+        track_metadata:
+          $ref: "#/components/schemas/TrackMetaData"
+    TrackMetaData:
+      type: object
+      properties:
+        spotify_track_id:
+          type: string
+        track_name:
+          type: string
+        artist_name:
+          type: string
+        album_name:
+          type: string
+        album_image_thumbnail_url:
+          type: string
+    DeleteRequestFromQueueRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AuthenticatedRequest"
+      properties:
+        spotify_track_id:
+          type: string
+    QueueLastUpdatedResponse:
+      type: object
+      properties:
+        queue_last_updated:
+          type: string
+          format: date-time
+    SearchTracksResponse:
+      type: object
+      properties:
+        queue:
+          type: string
+        tracks:
+          type: array
+          items:
+            $ref: "#/components/schemas/TrackMetaData"
+    SearchPlaylistResponse:
+      type: object
+      properties:
+        queue:
+          type: string
+        playlists:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlaylistMetadata"
+    RequestTrackRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        track_id:
+          type: string
+    ChangeFallbackPlaylistRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AuthenticatedRequest"
+      properties:
+        new_fallback_playlist_id:
+          type: string
+    SetFallbackPlaylistShuffleRequest:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/AuthenticatedRequest"
+      properties:
+        shuffle:
+          type: boolean
+    FullUser:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/SimpleUser"
+      properties:
+        listening_sessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SimpleListeningSession"
