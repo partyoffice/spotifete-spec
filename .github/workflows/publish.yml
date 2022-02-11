@@ -1,0 +1,25 @@
+name: Node CI
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: generate fetch sdk
+        run: npx -y @openapitools/openapi-generator-cli generate -i spotifete_spec_v1.yaml -g typescript-fetch -o ./spotifete_typescript_client/ --additional-properties=npmName=@spotifete/client-sdk
+      - name: cd into sdk
+        run: cd ./spotifete_typescript_client
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: publish
+        run: npm publish
