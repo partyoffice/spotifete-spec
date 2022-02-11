@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Spotifete Api
-  version: 0.0.2
+  version: 0.0.3
   description: Specfile for Spotifete
   contact:
     name: SimonErm
