@@ -9,6 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Validate version
+        run: |
+          if [ $(git describe --tags --abbrev=0) = $( grep -m1 version spotifete_spec_v1.yaml | awk -F: '{ print $2 }' | sed 's/[ ",]//g') ]; then
+            echo "Specversion and tag are not equal"
+            exit 1
+          fi
       - name: Generate fetch sdk
         run: npx -y @openapitools/openapi-generator-cli generate -i spotifete_spec_v1.yaml -g typescript-fetch -o ./spotifete_typescript_client/ --additional-properties=npmName=spotifete-client-sdk
       - uses: actions/setup-node@v1
